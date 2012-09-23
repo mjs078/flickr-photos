@@ -65,12 +65,64 @@ var setupPhotos = (function ($) {
         var holder = document.getElementById(id);
         return function (img) {
             var elm = document.createElement('div');
+    		var favBtn = document.createElement('button');
+			favBtn.onclick = function()
+    		{
+			  if (getCookie(this.imgName)=='Y')
+			  {
+				  deleteCookie(this.imgName);
+				  this.className = 'icon-heart-empty';
+			  }
+			  else
+			  {
+				  setCookie(this.imgName);
+				  this.className = 'icon-heart';
+			  }
+			};
+			favBtn.imgName = img.src;
+			if (getCookie(img.src)=='Y')
+			  favBtn.className = 'icon-heart';
+			else			
+			  favBtn.className = 'icon-heart-empty';
+			favBtn.style.width = '26px'
+			elm.appendChild(favBtn);
+            elm.appendChild(document.createElement('br'));            
             elm.className = 'photo';
             elm.appendChild(img);
             holder.appendChild(elm);
         };
     }
 
+    function setCookie(name, value)
+	{
+	  var date = new Date();
+	  date.setTime(date.getTime() + (90*24*60*60*1000));
+	  var expires = "; expires=" + date.toGMTString();
+
+	  var cookie = escape(value);
+	  document.cookie= name + "=" + value + expires + "; path=/";
+	}
+	  
+	function getCookie(name)
+	{
+	  var allCookies = document.cookie.split(";");
+	  
+	  for (var i = 0; i < allCookies.length; i++)
+		{
+		var x = allCookies[i].substr(0, allCookies[i].indexOf("="));
+		var y = allCookies[i].substr(allCookies[i].indexOf("=")+1);
+		x = x.replace(/^\s+|\s+$/g,"");
+		if (x == name)
+		  return unescape(y);
+		}
+		
+	  return '';  
+	}
+
+	function deleteCookie(name)
+	{
+		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+	}
     // ----
     
     var max_per_tag = 5;
