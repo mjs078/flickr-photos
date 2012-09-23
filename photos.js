@@ -70,12 +70,12 @@ var setupPhotos = (function ($) {
     		{
 			  if (getCookie(this.imgName)=='Y')
 			  {
-				  deleteCookie(this.imgName);
+				  setCookie(this.imgName, 'N');
 				  this.className = 'icon-heart-empty';
 			  }
 			  else
 			  {
-				  setCookie(this.imgName);
+				  setCookie(this.imgName, 'N');
 				  this.className = 'icon-heart';
 			  }
 			};
@@ -119,10 +119,6 @@ var setupPhotos = (function ($) {
 	  return '';  
 	}
 
-	function deleteCookie(name)
-	{
-		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-	}
     // ----
     
     var max_per_tag = 5;
