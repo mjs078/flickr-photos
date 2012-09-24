@@ -67,20 +67,20 @@ var setupPhotos = (function ($) {
             var elm = document.createElement('div');
     		var favBtn = document.createElement('button');
 			favBtn.onclick = function()
-    		{
-			  if (getCookie(this.imgName)=='Y')
-			  {
-				  setCookie(this.imgName, 'N');
-				  this.className = 'icon-heart-empty';
-			  }
-			  else
-			  {
-				  setCookie(this.imgName, 'N');
-				  this.className = 'icon-heart';
-			  }
+    		        {
+			  if (checkCookie(this.imgName))
+                          {
+                            updateCookie(this.imgName,'N');
+                            this.className = 'icon-heart-empty';
+                          }
+                          else
+                          {
+                            updateCookie(this.imgName,'Y');
+                            this.className = 'icon-heart';
+                          }
 			};
 			favBtn.imgName = img.src;
-			if (getCookie(img.src)=='Y')
+			if (checkCookie(img.src))
 			  favBtn.className = 'icon-heart';
 			else			
 			  favBtn.className = 'icon-heart-empty';
@@ -93,18 +93,31 @@ var setupPhotos = (function ($) {
         };
     }
 
-    function setCookie(name, value)
-	{
-	  var date = new Date();
-	  date.setTime(date.getTime() + (90*24*60*60*1000));
-	  var expires = "; expires=" + date.toGMTString();
-
-	  var cookie = escape(value);
-	  document.cookie= name + "=" + value + expires + "; path=/";
-	}
+    function updateCookie(name, value)
+    {
+      var favs = getCookie('flkFavs');
+      if (value == 'N'){
+        var s = name+',';
+        favs = favs.replace(s, '');
+      }
+      else
+        favs += name+',';
+      var date = new Date();
+      date.setTime(date.getTime() + (90*24*60*60*1000));
+      var expires = "; expires=" + date.toGMTString();
+ 
+      var cookie = escape(value);
+      document.cookie= "flkFavs=" + favs + expires + "; path=/";
+    }
+ 
+    function checkCookie(name)
+    {
+      var favs = getCookie('flkFavs');
+      return (favs.indexOf(name) != -1)
+    }
 	  
-	function getCookie(name)
-	{
+    function getCookie(name)
+    {
 	  var allCookies = document.cookie.split(";");
 	  
 	  for (var i = 0; i < allCookies.length; i++)
@@ -117,7 +130,7 @@ var setupPhotos = (function ($) {
 		}
 		
 	  return '';  
-	}
+    }
 
     // ----
     
